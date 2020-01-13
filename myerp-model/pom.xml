@@ -52,12 +52,30 @@
 
 
         <!-- ========== Test Dependencies ========== -->
-        <!-- ===== Tests ===== -->
+        <!-- ===== Test unitaires Junit-4 initial version ===== -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+
+        </dependency>
+        <!-- ===== Test unitaires Junit-5 latest version ===== -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
+
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+
+        </dependency>
+
+        <!-- ===== Test unitaires (retroActive Junit-4 for Junit-5 )===== -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+        </dependency>
+
 
         <!-- ===== JSR 303 - Bean validation ===== -->
         <!-- implementation -->
