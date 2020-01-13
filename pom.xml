@@ -265,7 +265,11 @@
                 <version>${junit-platform.version}</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.14.0</version>
+            </dependency>
             <!-- ===== Test unitaires (retroActive Junit-4 for Junit-5 )===== -->
             <dependency>
                 <groupId>org.junit.vintage</groupId>
