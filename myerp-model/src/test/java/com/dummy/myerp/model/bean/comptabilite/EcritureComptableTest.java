@@ -5,9 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class EcritureComptableTest {
@@ -27,16 +26,11 @@ public class EcritureComptableTest {
     return vRetour;
   }
 
-  @Before
-  public void start() {
-
-    vEcriture = new EcritureComptable();
-  }
-
   @BeforeEach
-  void setUp() {
+  void startJunit5() {
     vEcriture = new EcritureComptable();
   }
+
 
   @Test
   public void isEquilibree() {
@@ -57,7 +51,7 @@ public class EcritureComptableTest {
     Assert.assertFalse(vEcriture.toString(), vEcriture.isEquilibree());
   }
 
-  @org.junit.jupiter.api.Test
+  @Test
   void getTotalDebit() {
     BigDecimal TROIS_CENT_UN = BigDecimal.valueOf(301);
     vEcriture.getListLigneEcriture().clear();
@@ -66,5 +60,12 @@ public class EcritureComptableTest {
     vEcriture.getListLigneEcriture().add(this.createLigne(1, "101", "33"));
 
     assertThat(vEcriture.getTotalDebit()).isEqualTo(TROIS_CENT_UN);
+
+    vEcriture.getListLigneEcriture().clear();
+    vEcriture.setLibelle("Test_Debit");
+    vEcriture.getListLigneEcriture().add(this.createLigne(1, "200", null));
+    vEcriture.getListLigneEcriture().add(this.createLigne(1, "100", "33"));
+
+    assertThat(vEcriture.getTotalDebit()).isLessThan(TROIS_CENT_UN);
   }
 }
