@@ -59,13 +59,13 @@ public class EcritureComptableTest {
     vEcriture.getListLigneEcriture().add(this.createLigne(1, "200", null));
     vEcriture.getListLigneEcriture().add(this.createLigne(1, "101", "33"));
 
-    assertThat(vEcriture.getTotalDebit()).isEqualTo(TROIS_CENT_UN);
+    assertThat(vEcriture.getTotalDebit()).as("The Sum of all debit colon !").isEqualTo(TROIS_CENT_UN);
 
     vEcriture.getListLigneEcriture().clear();
     vEcriture.setLibelle("Test_Debit");
     vEcriture.getListLigneEcriture().add(this.createLigne(1, "200", null));
     vEcriture.getListLigneEcriture().add(this.createLigne(1, "100", "33"));
 
-    assertThat(vEcriture.getTotalDebit()).isLessThan(TROIS_CENT_UN);
+    assertThat(vEcriture.getTotalDebit()).as("The Sum of all debit colon !").isLessThan(TROIS_CENT_UN);
   }
 }
