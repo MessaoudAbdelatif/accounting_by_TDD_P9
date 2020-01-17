@@ -2,7 +2,7 @@ language: java
 jdk:
   - openjdk8
 
-script: ./mvnw clean install
+script:   -mvn test -Ptest-consumer -Ptest-business -Pm2e
 
 notifications:
   email: dzdevsoft@gmail.com
