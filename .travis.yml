@@ -6,3 +6,13 @@ script:   -mvn test -Ptest-consumer -Ptest-business -Pm2e
 
 notifications:
   email: dzdevsoft@gmail.com
+
+addons:
+  sonarcloud:
+    organization: "messaoudabdelatif"
+    token:
+      secure: "**************************" # encrypted value of your token
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar

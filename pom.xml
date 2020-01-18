@@ -396,6 +396,7 @@
 <!--          </configuration>-->
         </plugin>
 
+
         <!-- ===== Plugin d'analyse de code Checkstyle ===== -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
