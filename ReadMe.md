@@ -1,6 +1,6 @@
 
 #Learning Test Project9
-https://travis-ci.com/MessaoudAbdelatif/accounting_by_TDD_P9.svg?branch=master
+[![Build Status](https://travis-ci.com/MessaoudAbdelatif/accounting_by_TDD_P9.svg?branch=master)](https://travis-ci.com/MessaoudAbdelatif/accounting_by_TDD_P9)
 [![codecov](https://codecov.io/gh/MessaoudAbdelatif/accounting_by_TDD_P9/branch/master/graph/badge.svg)](https://codecov.io/gh/MessaoudAbdelatif/accounting_by_TDD_P9)
 
 
