@@ -69,7 +69,6 @@ public class JournalComptable {
         return vStB.toString();
     }
 
-
     // ==================== Méthodes STATIC ====================
     /**
      * Renvoie le {@link JournalComptable} de code {@code pCode} s'il est présent dans la liste
