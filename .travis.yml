@@ -9,7 +9,6 @@ script:
 
 
 after_success:
-  export CODECOV_TOKEN=3d0900aa-5440-42d4-8f8c-0e19b7123188
   bash <(curl -s https://codecov.io/bash)
 
 notifications:
