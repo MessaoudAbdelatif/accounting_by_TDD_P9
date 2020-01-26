@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.lang3.ObjectUtils;
@@ -67,7 +68,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
   // TODO à tester
   @Override
   public synchronized void addReference(EcritureComptable pEcritureComptable) {
-    // TODO à implémenter
 
     // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
@@ -80,23 +80,26 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     List<SequenceEcritureComptable> sequenceEcritureComptables = getSequenceEcritureComptables(
         cal.get(Calendar.YEAR));
 
-    if (!sequenceEcritureComptables.isEmpty()) {
+    /*if (!sequenceEcritureComptables.isEmpty()) {
       for (SequenceEcritureComptable theSequence : sequenceEcritureComptables) {
         if (theSequence.getJournalCode().toString()
             .equals(pEcritureComptable.getJournal().getCode())) {
           latestSequenceEcritureComptableThisYear = theSequence;
         }
+      }*/
+
+    if (!sequenceEcritureComptables.isEmpty()) {
+      List<SequenceEcritureComptable> collectSEC = sequenceEcritureComptables
+          .parallelStream()
+          .filter(
+              sequenceEcritureComptable -> sequenceEcritureComptable.getJournalCode().toString()
+                  .equals(pEcritureComptable.getJournal().getCode())).collect(Collectors.toList());
+      if (!collectSEC.isEmpty()) {
+        latestSequenceEcritureComptableThisYear = collectSEC.get(0);
       }
-//      List<SequenceEcritureComptable> collect = sequenceEcritureComptables
-//          .stream()
-//          .filter(
-//              sequenceEcritureComptable -> sequenceEcritureComptable.getJournalCode().toString()
-//                  .equals(pEcritureComptable.getJournal().getCode()))
-//          .collect(
-//              Collectors.toList());
-//      latestSequenceEcritureComptableThisYear = collect.get(0);
     }
-        /*
+
+      /*
                 2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
                         1. Utiliser le numéro 1.
                         */
@@ -108,7 +111,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
                    * Sinon :
                         1. Utiliser la dernière valeur + 1     */
 
-    if(!sequenceEcritureComptables.isEmpty()) {
+    if (!sequenceEcritureComptables.isEmpty() && latestSequenceEcritureComptableThisYear != null) {
       latestSequenceEcritureComptableThisYear
           .setDerniereValeur(latestSequenceEcritureComptableThisYear.getDerniereValeur() + 1);
     }
@@ -117,10 +120,41 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 
                 3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
 
+     */
 
-                4.  Enregistrer (insert/update) la valeur de la séquence en persitance
-                    (table sequence_ecriture_comptable)
-         */
+    String reference = pEcritureComptable.getReference();
+    reference += "-" + cal.get(Calendar.YEAR) + "/";
+    try {
+      if (latestSequenceEcritureComptableThisYear != null) {
+        Integer thisYearDerniereValeur = latestSequenceEcritureComptableThisYear
+            .getDerniereValeur();
+        StringBuilder code = new StringBuilder(String.valueOf(thisYearDerniereValeur));
+        for (int i = code.length(); i < 5; i++) {
+          code.insert(0, "0");
+        }
+        reference += code.toString();
+
+        pEcritureComptable.setReference(reference);
+
+        getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
+       /*
+
+      4. Enregistrer(insert / update) la valeur de la séquence en persitance
+          (table sequence_ecriture_comptable)
+          */
+
+        if (latestSequenceEcritureComptableThisYear.getDerniereValeur() == 1) {
+          getDaoProxy().getComptabiliteDao()
+              .insertSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+        } else {
+          getDaoProxy().getComptabiliteDao()
+              .updateSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+        }
+
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -133,7 +167,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     this.checkEcritureComptableUnit(pEcritureComptable);
     this.checkEcritureComptableContext(pEcritureComptable);
   }
-
 
   /**
    * Vérifie que l'Ecriture comptable respecte les règles de gestion unitaires, c'est à dire
@@ -189,7 +222,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 
     }
   }
-
 
   /**
    * Vérifie que l'Ecriture comptable respecte les règles de gestion liées au contexte (unicité de

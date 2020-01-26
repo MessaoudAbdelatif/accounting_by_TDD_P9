@@ -6,6 +6,7 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -92,4 +93,7 @@ public interface ComptabiliteDao {
   void deleteEcritureComptable(Integer pId);
 
 
+  void updateSequenceEcritureComptable(SequenceEcritureComptable sequenceEcritureComptable);
+
+  void insertSequenceEcritureComptable(SequenceEcritureComptable sequenceEcritureComptable);
 }
