@@ -96,6 +96,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
                   .equals(pEcritureComptable.getJournal().getCode())).collect(Collectors.toList());
       if (!collectSEC.isEmpty()) {
         latestSequenceEcritureComptableThisYear = collectSEC.get(0);
+      } else {
+        throw new NullPointerException(
+            "Ne trouve pas la dernière écriture comptable dans le journal !");
       }
     }
 

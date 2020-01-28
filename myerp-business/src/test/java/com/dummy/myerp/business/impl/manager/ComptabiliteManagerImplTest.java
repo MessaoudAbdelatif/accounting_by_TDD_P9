@@ -1,5 +1,7 @@
 package com.dummy.myerp.business.impl.manager;
 
+import static org.mockito.Mockito.when;
+
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.business.impl.TransactionManager;
@@ -63,8 +65,8 @@ public class ComptabiliteManagerImplTest {
 
   @org.junit.Test(expected = FunctionalException.class)
   public void checkEcritureComptableUnitRG2() throws Exception {
-    EcritureComptable vEcritureComptable;
-    vEcritureComptable = new EcritureComptable();
+//    EcritureComptable vEcritureComptable;
+//    vEcritureComptable = new EcritureComptable();
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
     vEcritureComptable.setLibelle("Libelle");
@@ -79,18 +81,35 @@ public class ComptabiliteManagerImplTest {
 
   @org.junit.Test(expected = FunctionalException.class)
   public void checkEcritureComptableUnitRG3() throws Exception {
-    EcritureComptable vEcritureComptable;
-    vEcritureComptable = new EcritureComptable();
+//    EcritureComptable vEcritureComptable;
+//    vEcritureComptable = new EcritureComptable();
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
     vEcritureComptable.setLibelle("Libelle");
     vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
         null, new BigDecimal(123),
         null));
-    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
         null, new BigDecimal(123),
         null));
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
 
+  @Test
+  public void addReference() throws FunctionalException {
+    vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+    vEcritureComptable.setDate(new Date());
+    vEcritureComptable.setLibelle("Libelle");
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        null, new BigDecimal(123),
+        null));
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+        null, new BigDecimal(123),
+        null));
+
+    manager.addReference(vEcritureComptable);
+
+
+
+  }
 }
