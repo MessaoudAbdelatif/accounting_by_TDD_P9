@@ -12,7 +12,7 @@ before_script:
   - cd ../..
 
 script:
-  - mvn test -Ptest-consumer -Ptest-business -Pm2e
+  - mvn test -Ptest-consumer -Ptest-business
 # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
 #  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
