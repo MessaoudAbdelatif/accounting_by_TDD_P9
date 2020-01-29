@@ -11,5 +11,4 @@ public class ComptabiliteDaoImpIT extends ConsumerTestCase {
   private ComptabiliteDao dao = getDaoProxy().getComptabiliteDao();
   private EcritureComptable vEcritureComptable;
 
-
 }
