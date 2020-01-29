@@ -94,22 +94,4 @@ public class ComptabiliteManagerImplTest {
         null));
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
-
-  @Test
-  public void addReference() throws FunctionalException {
-    vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-    vEcritureComptable.setDate(new Date());
-    vEcritureComptable.setLibelle("Libelle");
-    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-        null, new BigDecimal(123),
-        null));
-    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-        null, new BigDecimal(123),
-        null));
-
-    manager.addReference(vEcritureComptable);
-
-
-
-  }
 }
