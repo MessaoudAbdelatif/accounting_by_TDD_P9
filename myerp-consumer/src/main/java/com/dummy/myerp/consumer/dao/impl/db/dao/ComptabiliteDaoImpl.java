@@ -328,10 +328,10 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
    * SQLgetSéquenceEcritureComptable
    **/
 
-  private static String SQLgetSequenceEcritureComptable;
+  private static String SQLgetListSequenceEcritureComptable;
 
-  public void setSQLgetSequenceEcritureComptable(String pSQLgetSequenceEcritureComptable) {
-    SQLgetSequenceEcritureComptable = pSQLgetSequenceEcritureComptable;
+  public void setSQLgetListSequenceEcritureComptable(String pSQLgetSequenceEcritureComptable) {
+    SQLgetListSequenceEcritureComptable = pSQLgetSequenceEcritureComptable;
   }
 
   @Override
@@ -342,7 +342,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     vSqlParams.addValue("annee", year);
     SequanceEcritureComptableRM vRM = new SequanceEcritureComptableRM();
     List<SequenceEcritureComptable> vList = vJdbcTemplate
-        .query(SQLgetSequenceEcritureComptable, vSqlParams, vRM);
+        .query(SQLgetListSequenceEcritureComptable, vSqlParams, vRM);
     return vList;
   }
   // ==================== SéquenceEcritureComptable - UPDATE ====================
