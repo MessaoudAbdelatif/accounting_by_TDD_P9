@@ -387,6 +387,4 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     vSqlParams.addValue("derniere_valeur", sequenceEcritureComptable.getDerniereValeur());
     vJdbcTemplate.update(SQLinsertSequenceEcritureComptable, vSqlParams);
   }
-
-
 }
