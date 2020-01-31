@@ -18,6 +18,7 @@ public class ComptabiliteDaoImpIT extends ConsumerTestCase {
   @Test
   void getListCompteComptableTest() {
     //connected to db-dev & get DATA
+    // test
     assertThat(dao.getListCompteComptable().isEmpty()).isFalse();
   }
 }
