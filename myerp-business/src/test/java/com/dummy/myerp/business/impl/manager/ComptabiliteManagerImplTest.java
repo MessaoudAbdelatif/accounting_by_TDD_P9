@@ -94,4 +94,9 @@ public class ComptabiliteManagerImplTest {
         null));
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
+
+  @Test
+  public void addReferenceTest() {
+
+  }
 }
