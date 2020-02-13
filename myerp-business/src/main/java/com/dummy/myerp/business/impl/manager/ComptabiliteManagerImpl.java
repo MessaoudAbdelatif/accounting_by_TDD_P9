@@ -73,6 +73,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
                     (table sequence_ecriture_comptable) */
+
     SequenceEcritureComptable latestSequenceEcritureComptableThisYear = null;
 
     Calendar cal = Calendar.getInstance();

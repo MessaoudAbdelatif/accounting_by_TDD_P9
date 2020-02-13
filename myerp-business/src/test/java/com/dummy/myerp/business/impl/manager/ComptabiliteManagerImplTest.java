@@ -1,11 +1,6 @@
 package com.dummy.myerp.business.impl.manager;
 
-import static org.mockito.Mockito.when;
-
-import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.business.impl.TransactionManager;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
@@ -15,28 +10,22 @@ import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@ExtendWith(MockitoExtension.class)
-public class ComptabiliteManagerImplTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ComptabiliteManagerImplTest extends AbstractBusinessManager {
+
 
   private EcritureComptable vEcritureComptable;
+
+  @InjectMocks
   private ComptabiliteManagerImpl manager;
-
-  @Mock
-  private DaoProxy daoProxy;
-
-  @Mock
-  private BusinessProxy businessProxy;
 
   @Before
   public void setUp() {
-
     this.vEcritureComptable = new EcritureComptable();
-    this.manager = new ComptabiliteManagerImpl();
-    AbstractBusinessManager.configure(businessProxy, daoProxy, TransactionManager.getInstance());
   }
 
   @Test
@@ -58,15 +47,13 @@ public class ComptabiliteManagerImplTest {
 
   @org.junit.Test(expected = FunctionalException.class)
   public void checkEcritureComptableUnitViolation() throws Exception {
-    EcritureComptable vEcritureComptable;
-    vEcritureComptable = new EcritureComptable();
+
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
 
   @org.junit.Test(expected = FunctionalException.class)
   public void checkEcritureComptableUnitRG2() throws Exception {
-//    EcritureComptable vEcritureComptable;
-//    vEcritureComptable = new EcritureComptable();
+
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
     vEcritureComptable.setLibelle("Libelle");
@@ -81,8 +68,7 @@ public class ComptabiliteManagerImplTest {
 
   @org.junit.Test(expected = FunctionalException.class)
   public void checkEcritureComptableUnitRG3() throws Exception {
-//    EcritureComptable vEcritureComptable;
-//    vEcritureComptable = new EcritureComptable();
+
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
     vEcritureComptable.setLibelle("Libelle");
@@ -95,8 +81,4 @@ public class ComptabiliteManagerImplTest {
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
 
-  @Test
-  public void addReferenceTest() {
-
-  }
 }
