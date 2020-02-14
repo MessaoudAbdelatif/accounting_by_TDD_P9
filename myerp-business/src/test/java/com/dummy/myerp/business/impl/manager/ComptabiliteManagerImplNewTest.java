@@ -1,12 +1,8 @@
 package com.dummy.myerp.business.impl.manager;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -17,11 +13,8 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +32,7 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
 
   @Mock
   ComptabiliteDao comptabiliteDao;
+
   @Mock
   DaoProxy daoProxy;
 
@@ -72,28 +66,28 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     then(getDaoProxy()).should(times(3)).getComptabiliteDao();
 
   }
-
-  @Test
-  public void checkEcritureComptable() {
-  }
-
-  @Test
-  public void checkEcritureComptableUnit() {
-  }
-
-  @Test
-  public void checkEcritureComptableContext() {
-  }
-
-  @Test
-  public void insertEcritureComptable() {
-  }
-
-  @Test
-  public void updateEcritureComptable() {
-  }
-
-  @Test
-  public void deleteEcritureComptable() {
-  }
+//
+//  @Test
+//  public void checkEcritureComptable() {
+//  }
+//
+//  @Test
+//  public void checkEcritureComptableUnit() {
+//  }
+//
+//  @Test
+//  public void checkEcritureComptableContext() {
+//  }
+//
+//  @Test
+//  public void insertEcritureComptable() {
+//  }
+//
+//  @Test
+//  public void updateEcritureComptable() {
+//  }
+//
+//  @Test
+//  public void deleteEcritureComptable() {
+//  }
 }
