@@ -2,6 +2,7 @@ package com.dummy.myerp.business.impl.manager;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
@@ -47,30 +48,52 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     this.vEcritureComptable = new EcritureComptable();
     AbstractBusinessManager.configure(businessProxy, daoProxy, transactionManager);
     given(getDaoProxy().getComptabiliteDao()).willReturn(this.comptabiliteDao);
-  }
 
-  @Test
-  public void addReference() {
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
     vEcritureComptable.setLibelle("Libelle");
-    vEcritureComptable.setReference("AC-2020/00001");
     vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
         null, new BigDecimal(123),
         null));
     vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
         null, null,
         new BigDecimal(123)));
+  }
 
-    classUnderTest.addReference(vEcritureComptable);
-    then(getDaoProxy()).should(times(3)).getComptabiliteDao();
+  @Test
+  void getListCompteComptable() {
+    classUnderTest.getListCompteComptable();
+    then(getDaoProxy()).should(times(1)).getComptabiliteDao();
+  }
+
+  @Test
+  void getListJournalComptable() {
+    classUnderTest.getListJournalComptable();
+    then(getDaoProxy()).should(times(1)).getComptabiliteDao();
+  }
+
+  @Test
+  void getListEcritureComptable() {
+    classUnderTest.getListEcritureComptable();
+    then(getDaoProxy()).should(times(1)).getComptabiliteDao();
+  }
+
+  @Test
+  void getSequenceEcritureComptables() {
+    classUnderTest.getSequenceEcritureComptables(2019);
+    then(getDaoProxy()).should(times(1)).getComptabiliteDao();
 
   }
-//
-//  @Test
-//  public void checkEcritureComptable() {
-//  }
-//
+
+  @Test
+  public void addReference() {
+
+    classUnderTest.addReference(vEcritureComptable);
+    then(getDaoProxy()).should(atLeast(3)).getComptabiliteDao();
+
+  }
+
+
 //  @Test
 //  public void checkEcritureComptableUnit() {
 //  }

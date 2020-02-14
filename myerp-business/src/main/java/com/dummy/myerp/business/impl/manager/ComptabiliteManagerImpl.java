@@ -65,7 +65,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable(year);
   }
 
-  // TODO à tester
   @Override
   public synchronized void addReference(EcritureComptable pEcritureComptable) {
 
