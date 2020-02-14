@@ -93,7 +93,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
       List<SequenceEcritureComptable> collectSEC = sequenceEcritureComptables
           .parallelStream()
           .filter(
-              sequenceEcritureComptable -> sequenceEcritureComptable.getJournalCode().toString()
+              sequenceEcritureComptable -> sequenceEcritureComptable.getJournalCode()
                   .equals(pEcritureComptable.getJournal().getCode())).collect(Collectors.toList());
       if (!collectSEC.isEmpty()) {
         latestSequenceEcritureComptableThisYear = collectSEC.get(0);

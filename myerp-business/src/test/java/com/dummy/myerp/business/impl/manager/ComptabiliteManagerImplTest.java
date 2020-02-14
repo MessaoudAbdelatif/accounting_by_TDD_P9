@@ -80,5 +80,4 @@ public class ComptabiliteManagerImplTest extends AbstractBusinessManager {
         null));
     manager.checkEcritureComptableUnit(vEcritureComptable);
   }
-
 }
