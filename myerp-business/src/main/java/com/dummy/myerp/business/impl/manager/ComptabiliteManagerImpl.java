@@ -226,11 +226,33 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     //    Le formatage de la référence est : XX-AAAA/#####.
     //    Ex : Journal de banque (BQ), écriture au 31/12/2016
     //        --> BQ-2016/00001
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(pEcritureComptable.getDate());
+    List<SequenceEcritureComptable> sequenceEcritureComptables = getSequenceEcritureComptables(
+        cal.get(Calendar.YEAR));
+
+
     if (pEcritureComptable.getReference() != null) {
+      String theReference = pEcritureComptable.getReference();
+
+//      String name = "AA-1234/00001";
+//
+//      String[] nameSplit = name.split("[-/]");
+//      System.out.println(nameSplit[0]);
+//      System.out.println(nameSplit[1]);
+//      System.out.println(nameSplit[2]);
+//
+//      OUTPUT:
+//      AA
+//      1234
+//      00001
+
+    }
+
 
 
     }
-  }
+
 
   /**
    * Vérifie que l'Ecriture comptable respecte les règles de gestion liées au contexte (unicité de

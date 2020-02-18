@@ -1,15 +1,11 @@
 package com.dummy.myerp.business.impl.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -21,7 +17,6 @@ import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
-import com.dummy.myerp.technical.exception.NotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,7 +67,7 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
   }
 
   @Test
-  void getListCompteComptable() {
+  final void getListCompteComptable() {
     initClassUnderTestDaoMock();
 
     classUnderTest.getListCompteComptable();
@@ -105,11 +100,11 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
   }
 
   @Test
-  public void addReference() {
+  public final void addReference() {
     initClassUnderTestDaoMock();
 
     classUnderTest.addReference(vEcritureComptable);
-    then(getDaoProxy()).should(atLeast(3)).getComptabiliteDao();
+    then(getDaoProxy()).should(atLeast(1)).getComptabiliteDao();
   }
 
   @Test
@@ -120,29 +115,63 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     FunctionalException functionalException = assertThrows(FunctionalException.class,
         () -> classUnderTest.checkEcritureComptable(vEcritureComptable));
     //Checking the right FunctionalExceptionMessage.
-    assertThat(functionalException.getMessage()).isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
+    assertThat(functionalException.getMessage())
+        .isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
   }
 
 
   @Test
-  public void checkEcritureComptableUnit_regexPatternFail_triggedFunctionalException(){
+  public final void checkEcritureComptableUnit_regexPatternFail_thenTriggedFunctionalException() {
 
     vEcritureComptable.setReference("KSBCKQSBC");
 
     FunctionalException functionalException = assertThrows(FunctionalException.class,
         () -> classUnderTest.checkEcritureComptable(vEcritureComptable));
-    assertThat(functionalException.getMessage()).isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
+
+    assertThat(functionalException.getMessage())
+        .isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
 
   }
+
   @Test
-  public void checkEcritureComptableUnit_labelleSizeFail_triggedFunctionalException(){
+  public final void checkEcritureComptableUnit_labelleSizeFail_thenTriggedFunctionalException() {
 
     vEcritureComptable.setLibelle("");
 
     FunctionalException functionalException = assertThrows(FunctionalException.class,
         () -> classUnderTest.checkEcritureComptable(vEcritureComptable));
-    assertThat(functionalException.getMessage()).isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
 
+    assertThat(functionalException.getMessage())
+        .isEqualTo("L'écriture comptable ne respecte pas les règles de gestion.");
+
+  }
+
+  @Test
+  public final void checkEcritureComptableUnit_RG2_UnBalanced_thenTriggedFunctionalException() {
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        null, new BigDecimal(12),
+        null));
+
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+    assertThat(functionalException.getMessage())
+        .isEqualTo("L'écriture comptable n'est pas équilibrée.");
+
+  }
+
+  @Test
+  public final void checkEcritureComptableUnit_RG3_atLeast2LignesOneDebitOneCredit_thenTriggedFunctionalException() {
+    // Keep Balanced ListLigneEcriture by removing one line and adding new one with negative value.
+    vEcritureComptable.getListLigneEcriture().remove(1);
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        null, new BigDecimal(-123),
+        null));
+
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+    assertThat(functionalException.getMessage())
+        .isEqualTo(
+            "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
   }
 
 //  @Test
