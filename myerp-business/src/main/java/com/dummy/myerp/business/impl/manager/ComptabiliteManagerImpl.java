@@ -227,10 +227,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     //    Ex : Journal de banque (BQ), écriture au 31/12/2016
     //        --> BQ-2016/00001
     Calendar cal = Calendar.getInstance();
-    cal.setTime(pEcritureComptable.getDate());
-    List<SequenceEcritureComptable> sequenceEcritureComptables = getSequenceEcritureComptables(
-        cal.get(Calendar.YEAR));
-
+    int calYearInterger = cal.get(Calendar.YEAR);
 
     if (pEcritureComptable.getReference() != null) {
       String theReference = pEcritureComptable.getReference();
@@ -247,11 +244,38 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 //      1234
 //      00001
 
+      String[] theReferenceSplit = theReference.split("[-/]");
+
+      // validation du  code journal.
+      if (!theReferenceSplit[0].equals(pEcritureComptable.getJournal().getCode())) {
+        throw new FunctionalException(
+            "La référence de l'écriture comptable :" + theReferenceSplit[0]
+                + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
+                .getCode());
+      }
+        // validation de l'année.
+         else if (!theReferenceSplit[1].equals(String.valueOf(calYearInterger))){
+          throw new FunctionalException("La référence de l'écriture comptable : " + theReferenceSplit[1]
+              + " ne correspond pas à l'année' d'écriture " + calYearInterger );
+
+        }
+         // validation de la référence
+      if (!theReferenceSplit[2].equals(getSequenceEcritureComptables(cal.get(Calendar.YEAR)).get(0))){
+        throw new FunctionalException(
+            "Le numéro de séquence de l'écriture " + theReferenceSplit[2] + " ne correspond pas à la dernière séquence du journal " + getSequenceEcritureComptables(cal.get(Calendar.YEAR)));
+
+    }
+  }else{
+    throw new FunctionalException(
+        "La référence de l'écriture ne peut pas être nulle.");
+  }
+
+
+
     }
 
 
 
-    }
 
 
   /**
