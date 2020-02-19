@@ -29,6 +29,7 @@ public class ComptabiliteManagerImplTest extends AbstractBusinessManager {
     this.vEcritureComptable = new EcritureComptable();
   }
 
+
   @Ignore
   @Test
   public void checkEcritureComptableUnit() throws Exception {

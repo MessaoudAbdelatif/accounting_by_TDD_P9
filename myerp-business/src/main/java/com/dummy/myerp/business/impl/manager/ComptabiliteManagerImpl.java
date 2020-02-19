@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.lang3.ObjectUtils;
@@ -61,8 +60,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
   /**
    * {@inheritDoc}
    */
-  public List<SequenceEcritureComptable> getSequenceEcritureComptables(Integer year) {
-    return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable(year);
+  public SequenceEcritureComptable getSequenceEcritureComptables(String code, Integer year) {
+    return getDaoProxy().getComptabiliteDao().getSequenceEcritureComptable(code, year);
   }
 
   @Override
@@ -77,36 +76,17 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(pEcritureComptable.getDate());
-    List<SequenceEcritureComptable> sequenceEcritureComptables = getSequenceEcritureComptables(
+
+    latestSequenceEcritureComptableThisYear = getSequenceEcritureComptables(
+        pEcritureComptable.getJournal().getCode(),
         cal.get(Calendar.YEAR));
 
-    /*if (!sequenceEcritureComptables.isEmpty()) {
-      for (SequenceEcritureComptable theSequence : sequenceEcritureComptables) {
-        if (theSequence.getJournalCode().toString()
-            .equals(pEcritureComptable.getJournal().getCode())) {
-          latestSequenceEcritureComptableThisYear = theSequence;
-        }
-      }*/
-
-    if (!sequenceEcritureComptables.isEmpty()) {
-      List<SequenceEcritureComptable> collectSEC = sequenceEcritureComptables
-          .parallelStream()
-          .filter(
-              sequenceEcritureComptable -> sequenceEcritureComptable.getJournalCode()
-                  .equals(pEcritureComptable.getJournal().getCode())).collect(Collectors.toList());
-      if (!collectSEC.isEmpty()) {
-        latestSequenceEcritureComptableThisYear = collectSEC.get(0);
-      } else {
-        throw new NullPointerException(
-            "Ne trouve pas la dernière écriture comptable dans le journal !");
-      }
-    }
 
       /*
                 2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
                         1. Utiliser le numéro 1.
                         */
-    if (sequenceEcritureComptables.isEmpty()) {
+    if (latestSequenceEcritureComptableThisYear == null) {
       latestSequenceEcritureComptableThisYear = new SequenceEcritureComptable(
           cal.get(Calendar.YEAR), 1, pEcritureComptable.getJournal());
     }
@@ -114,7 +94,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
                    * Sinon :
                         1. Utiliser la dernière valeur + 1     */
 
-    if (!sequenceEcritureComptables.isEmpty() && latestSequenceEcritureComptableThisYear != null) {
+    else {
       latestSequenceEcritureComptableThisYear
           .setDerniereValeur(latestSequenceEcritureComptableThisYear.getDerniereValeur() + 1);
     }
@@ -127,37 +107,32 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 
     String reference = pEcritureComptable.getReference();
     reference += "-" + cal.get(Calendar.YEAR) + "/";
-    try {
-      if (latestSequenceEcritureComptableThisYear != null) {
-        Integer thisYearDerniereValeur = latestSequenceEcritureComptableThisYear
-            .getDerniereValeur();
-        StringBuilder code = new StringBuilder(String.valueOf(thisYearDerniereValeur));
-        for (int i = code.length(); i < 5; i++) {
-          code.insert(0, "0");
-        }
-        reference += code.toString();
 
-        pEcritureComptable.setReference(reference);
+    Integer thisYearDerniereValeur = latestSequenceEcritureComptableThisYear
+        .getDerniereValeur();
+    StringBuilder code = new StringBuilder(String.valueOf(thisYearDerniereValeur));
+    for (int i = code.length(); i < 5; i++) {
+      code.insert(0, "0");
+    }
+    reference += code.toString();
 
-        getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
+    pEcritureComptable.setReference(reference);
+
+//    getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
        /*
 
       4. Enregistrer(insert / update) la valeur de la séquence en persitance
           (table sequence_ecriture_comptable)
           */
 
-        if (latestSequenceEcritureComptableThisYear.getDerniereValeur() == 1) {
-          getDaoProxy().getComptabiliteDao()
-              .insertSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
-        } else {
-          getDaoProxy().getComptabiliteDao()
-              .updateSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
-        }
-
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    if (latestSequenceEcritureComptableThisYear.getDerniereValeur() == 1) {
+      getDaoProxy().getComptabiliteDao()
+          .insertSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+    } else {
+      getDaoProxy().getComptabiliteDao()
+          .updateSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
     }
+
   }
 
   /**
@@ -253,29 +228,33 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
                 + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
                 .getCode());
       }
-        // validation de l'année.
-         else if (!theReferenceSplit[1].equals(String.valueOf(calYearInterger))){
-          throw new FunctionalException("La référence de l'écriture comptable : " + theReferenceSplit[1]
-              + " ne correspond pas à l'année' d'écriture " + calYearInterger );
-
-        }
-         // validation de la référence
-      if (!theReferenceSplit[2].equals(getSequenceEcritureComptables(cal.get(Calendar.YEAR)).get(0))){
+      // validation de l'année.
+      else if (!theReferenceSplit[1].equals(String.valueOf(calYearInterger))) {
         throw new FunctionalException(
-            "Le numéro de séquence de l'écriture " + theReferenceSplit[2] + " ne correspond pas à la dernière séquence du journal " + getSequenceEcritureComptables(cal.get(Calendar.YEAR)));
+            "La référence de l'écriture comptable : " + theReferenceSplit[1]
+                + " ne correspond pas à l'année' d'écriture " + calYearInterger);
 
+      }
+      // validation de la référence
+      SequenceEcritureComptable lastSECDB =
+          getSequenceEcritureComptables(pEcritureComptable.getJournal().getCode(),
+              cal.get(Calendar.YEAR));
+      if (!theReferenceSplit[2]
+          .equals(String.format("%05d",lastSECDB.getDerniereValeur()))) {
+        throw new FunctionalException(
+            "Le numéro de séquence de l'écriture " + theReferenceSplit[2]
+                + " ne correspond pas à la dernière séquence du journal "
+                + getSequenceEcritureComptables(pEcritureComptable.getJournal().getCode(),
+                cal.get(Calendar.YEAR)).getDerniereValeur());
+
+      }
+    } else {
+      throw new FunctionalException(
+          "La référence de l'écriture ne peut pas être nulle.");
     }
-  }else{
-    throw new FunctionalException(
-        "La référence de l'écriture ne peut pas être nulle.");
+
+
   }
-
-
-
-    }
-
-
-
 
 
   /**

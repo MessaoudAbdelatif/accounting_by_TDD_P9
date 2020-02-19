@@ -32,9 +32,12 @@ public interface ComptabiliteDao {
   /**
    * Renvoie la liste des Séquences d'écritures comptables
    *
-   * @return {@link List}
+   * @param code: code du journal comptable associe à la séquence d'écriture en questiion.
+   * @param year: l'année de la persistance de la séquence d'écriture comptable.
+   *
+   * @return {@link SequenceEcritureComptable}
    **/
-  List<SequenceEcritureComptable> getListSequenceEcritureComptable(Integer year);
+  SequenceEcritureComptable getSequenceEcritureComptable(String code,Integer year);
 
 
   // ==================== EcritureComptable ====================

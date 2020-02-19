@@ -2,10 +2,12 @@ package com.dummy.myerp.business.impl.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -16,10 +18,13 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -94,7 +99,7 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
   void getSequenceEcritureComptables() {
     initClassUnderTestDaoMock();
 
-    classUnderTest.getSequenceEcritureComptables(2019);
+    classUnderTest.getSequenceEcritureComptables("AC",2019);
     then(getDaoProxy()).should(times(1)).getComptabiliteDao();
 
   }
@@ -172,6 +177,28 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     assertThat(functionalException.getMessage())
         .isEqualTo(
             "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+  }
+
+  //remplace the ignored checkEcritureComptableUnit().
+  @Test
+  public void checkEcritureComptableUnit() throws Exception {
+    initClassUnderTestDaoMock();
+    SequenceEcritureComptable testSEC = new SequenceEcritureComptable();
+    testSEC.setDerniereValeur(1);
+    when(daoProxy.getComptabiliteDao().getSequenceEcritureComptable(any(),any())).thenReturn(testSEC);
+
+    vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+    vEcritureComptable.setDate(new Date());
+    vEcritureComptable.setLibelle("Libelle");
+    vEcritureComptable.setReference("AC-2020/00001");
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        null, new BigDecimal(123),
+        null));
+    vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+        null, null,
+        new BigDecimal(123)));
+
+    classUnderTest.checkEcritureComptableUnit(vEcritureComptable);
   }
 
 //  @Test
