@@ -3,6 +3,8 @@ package com.dummy.myerp.business.impl.manager;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeast;
@@ -23,8 +25,6 @@ import com.dummy.myerp.technical.exception.FunctionalException;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -99,13 +99,13 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
   void getSequenceEcritureComptables() {
     initClassUnderTestDaoMock();
 
-    classUnderTest.getSequenceEcritureComptables("AC",2019);
+    classUnderTest.getSequenceEcritureComptables("AC", 2019);
     then(getDaoProxy()).should(times(1)).getComptabiliteDao();
 
   }
 
   @Test
-  public final void addReference() {
+  public final void addReference_callAtLeastOneTimeDAO() {
     initClassUnderTestDaoMock();
 
     classUnderTest.addReference(vEcritureComptable);
@@ -185,7 +185,8 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     initClassUnderTestDaoMock();
     SequenceEcritureComptable testSEC = new SequenceEcritureComptable();
     testSEC.setDerniereValeur(1);
-    when(daoProxy.getComptabiliteDao().getSequenceEcritureComptable(any(),any())).thenReturn(testSEC);
+    when(daoProxy.getComptabiliteDao().getSequenceEcritureComptable(any(), any()))
+        .thenReturn(testSEC);
 
     vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
     vEcritureComptable.setDate(new Date());
@@ -201,19 +202,60 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
     classUnderTest.checkEcritureComptableUnit(vEcritureComptable);
   }
 
-//  @Test
-//  public void checkEcritureComptableContext() {
-//  }
-//
-//  @Test
-//  public void insertEcritureComptable() {
-//  }
-//
-//  @Test
-//  public void updateEcritureComptable() {
-//  }
-//
-//  @Test
-//  public void deleteEcritureComptable() {
-//  }
+  @Test
+  void checkEcritureComptableUnit_RG5_whenReferenceIsNull_thenTriggedFonctionalException() {
+    vEcritureComptable.setReference(null);
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+    assertThat("La référence de l'écriture ne peut pas être nulle.")
+        .isEqualTo(functionalException.getMessage());
+  }
+
+  @Test
+  void checkEcritureComptableUnit_RG5_whenReferencePartOneCodeJournalIsWrong_thenTriggedFonctionalException() {
+    vEcritureComptable.setReference("AZ-2020/00001");
+
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+
+    assertThat("La référence de l'écriture comptable :" + "AZ"
+        + " ne correspond pas au code journal " + vEcritureComptable.getJournal()
+        .getCode()).isEqualTo(functionalException.getMessage());
+  }
+
+  @Test
+  void checkEcritureComptableUnit_RG5_whenReferencePartTwoYearIsWrong_thenTriggedFonctionalException() {
+    vEcritureComptable.setReference("AC-2019/00001");
+
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+
+    assertThat(
+        "La référence de l'écriture comptable : " + "2019"
+            + " ne correspond pas à l'année' d'écriture " + "2020")
+        .isEqualTo(functionalException.getMessage());
+  }
+
+  @Test
+  void checkEcritureComptableUnit_RG5_whenReferencePartThreeIsWrong_thenTriggedFonctionalException() {
+    initClassUnderTestDaoMock();
+    vEcritureComptable.setReference("AC-2020/00003");
+
+    JournalComptable journalComptable = new JournalComptable("AC", "Dummy");
+    SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(2020, 2,
+        journalComptable);
+    //Given
+    given(comptabiliteDao.getSequenceEcritureComptable(anyString(), anyInt()))
+        .willReturn(sequenceEcritureComptable);
+
+    //When
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableUnit(vEcritureComptable));
+
+    //Then
+    assertThat("Le numéro de séquence de l'écriture " + "00003"
+        + " ne correspond pas à la dernière séquence du journal "
+        + "2").isEqualTo(functionalException.getMessage());
+  }
+
 }

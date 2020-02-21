@@ -118,7 +118,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
 
     pEcritureComptable.setReference(reference);
 
-//    getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
+    //    getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
        /*
 
       4. Enregistrer(insert / update) la valeur de la séquence en persitance
@@ -152,7 +152,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
    * @param pEcritureComptable -
    * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
    */
-  // TODO tests à compléter
   protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable)
       throws FunctionalException {
     // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
@@ -193,7 +192,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
           "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
     }
 
-    // TODO ===== RG_Compta_5 : Format et contenu de la référence
     // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
 
     //    La référence d'une écriture comptable est composée du code du journal dans lequel figure l'écriture suivi
@@ -207,17 +205,17 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     if (pEcritureComptable.getReference() != null) {
       String theReference = pEcritureComptable.getReference();
 
-//      String name = "AA-1234/00001";
-//
-//      String[] nameSplit = name.split("[-/]");
-//      System.out.println(nameSplit[0]);
-//      System.out.println(nameSplit[1]);
-//      System.out.println(nameSplit[2]);
-//
-//      OUTPUT:
-//      AA
-//      1234
-//      00001
+      //      String name = "AA-1234/00001";
+      //
+      //      String[] nameSplit = name.split("[-/]");
+      //      System.out.println(nameSplit[0]);
+      //      System.out.println(nameSplit[1]);
+      //      System.out.println(nameSplit[2]);
+      //
+      //      OUTPUT:
+      //      AA
+      //      1234
+      //      00001
 
       String[] theReferenceSplit = theReference.split("[-/]");
 
@@ -225,8 +223,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
       if (!theReferenceSplit[0].equals(pEcritureComptable.getJournal().getCode())) {
         throw new FunctionalException(
             "La référence de l'écriture comptable :" + theReferenceSplit[0]
-                + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
-                .getCode());
+            + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
+            .getCode());
       }
       // validation de l'année.
       else if (!theReferenceSplit[1].equals(String.valueOf(calYearInterger))) {
@@ -240,7 +238,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
           getSequenceEcritureComptables(pEcritureComptable.getJournal().getCode(),
               cal.get(Calendar.YEAR));
       if (!theReferenceSplit[2]
-          .equals(String.format("%05d",lastSECDB.getDerniereValeur()))) {
+          .equals(String.format("%05d", lastSECDB.getDerniereValeur()))) {
         throw new FunctionalException(
             "Le numéro de séquence de l'écriture " + theReferenceSplit[2]
                 + " ne correspond pas à la dernière séquence du journal "

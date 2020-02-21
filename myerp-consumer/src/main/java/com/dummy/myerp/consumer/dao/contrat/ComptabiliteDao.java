@@ -6,7 +6,6 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -34,11 +33,9 @@ public interface ComptabiliteDao {
    *
    * @param code: code du journal comptable associe à la séquence d'écriture en questiion.
    * @param year: l'année de la persistance de la séquence d'écriture comptable.
-   *
    * @return {@link SequenceEcritureComptable}
    **/
-  SequenceEcritureComptable getSequenceEcritureComptable(String code,Integer year);
-
+  SequenceEcritureComptable getSequenceEcritureComptable(String code, Integer year);
 
   // ==================== EcritureComptable ====================
 
