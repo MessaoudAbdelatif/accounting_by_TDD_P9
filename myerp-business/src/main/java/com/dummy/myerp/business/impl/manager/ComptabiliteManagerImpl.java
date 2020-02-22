@@ -223,8 +223,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
       if (!theReferenceSplit[0].equals(pEcritureComptable.getJournal().getCode())) {
         throw new FunctionalException(
             "La référence de l'écriture comptable :" + theReferenceSplit[0]
-            + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
-            .getCode());
+                + " ne correspond pas au code journal " + pEcritureComptable.getJournal()
+                .getCode());
       }
       // validation de l'année.
       else if (!theReferenceSplit[1].equals(String.valueOf(calYearInterger))) {

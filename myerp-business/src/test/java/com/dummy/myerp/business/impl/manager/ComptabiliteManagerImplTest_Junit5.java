@@ -22,6 +22,7 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
+public class ComptabiliteManagerImplTest_Junit5 extends AbstractBusinessManager {
 
   private EcritureComptable vEcritureComptable;
 
@@ -237,7 +238,7 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
   }
 
   @Test
-  void checkEcritureComptableUnit_RG5_whenReferencePartThreeIsWrong_thenTriggedFonctionalException() {
+  void checkEcritureComputableUnit_RG5_whenReferencePartThreeIsWrong_thenTriggerFunctionalException() {
     initClassUnderTestDaoMock();
     vEcritureComptable.setReference("AC-2020/00003");
 
@@ -258,4 +259,73 @@ public class ComptabiliteManagerImplNewTest extends AbstractBusinessManager {
         + "2").isEqualTo(functionalException.getMessage());
   }
 
+  @Test
+  void checkEcritureComputableContext_RG6_UniqueReferenceRule_NotRespected_TriggerFunctionalException()
+      throws NotFoundException {
+
+    initClassUnderTestDaoMock();
+
+    EcritureComptable fakeEcritureComptable = new EcritureComptable();
+    fakeEcritureComptable.setId(1);
+    fakeEcritureComptable.setReference("AC-2020/00001");
+
+    given(comptabiliteDao.getEcritureComptableByRef(anyString())).willReturn(fakeEcritureComptable);
+
+    vEcritureComptable.setReference("AC-2020/00001");
+
+    FunctionalException functionalException = assertThrows(FunctionalException.class,
+        () -> classUnderTest.checkEcritureComptableContext(vEcritureComptable));
+
+    assertThat("Une autre écriture comptable existe déjà avec la même référence.")
+        .isEqualTo(functionalException.getMessage());
+
+  }
+
+  @Test
+  void checkEcritureComputableContext_RG6_UniqueReferenceRule_Passing()
+      throws FunctionalException, NotFoundException {
+    initClassUnderTestDaoMock();
+
+    EcritureComptable fakeEcritureComptable = new EcritureComptable();
+    fakeEcritureComptable.setId(1);
+    fakeEcritureComptable.setReference("AC-2020/00001");
+
+    given(comptabiliteDao.getEcritureComptableByRef(anyString())).willReturn(fakeEcritureComptable);
+
+    vEcritureComptable.setId(1);
+    vEcritureComptable.setReference("AC-2020/00001");
+
+    classUnderTest.checkEcritureComptableContext(vEcritureComptable);
+  }
+
+  @Test
+  void checkEcritureComputableContext_RG6_TriggedNotFoundException()
+      throws NotFoundException, FunctionalException {
+    initClassUnderTestDaoMock();
+
+    when(comptabiliteDao.getEcritureComptableByRef(anyString())).thenThrow(NotFoundException.class);
+    vEcritureComptable.setReference("AC-2020/00001");
+
+    classUnderTest.checkEcritureComptableContext(vEcritureComptable);
+
+  }
+
+  @Test
+  void checkEcritureComptable_passedAfterAddReference() throws FunctionalException, NotFoundException {
+    initClassUnderTestDaoMock();
+
+    JournalComptable journalComptable = new JournalComptable("AC", "Dummy");
+    SequenceEcritureComptable sequenceEcritureComptable2 = new SequenceEcritureComptable(2020, 2,
+        journalComptable);
+    SequenceEcritureComptable sequenceEcritureComptable3 = new SequenceEcritureComptable(2020, 3,
+        journalComptable);
+    given(comptabiliteDao.getSequenceEcritureComptable(any(String.class), any(Integer.class)))
+        .willReturn(sequenceEcritureComptable2, sequenceEcritureComptable3);
+
+    when(comptabiliteDao.getEcritureComptableByRef(anyString())).thenThrow(NotFoundException.class);
+    classUnderTest.addReference(vEcritureComptable);
+    System.out.println(vEcritureComptable);
+    vEcritureComptable.setReference("AC-2020/00003");
+    classUnderTest.checkEcritureComptable(vEcritureComptable);
+  }
 }
