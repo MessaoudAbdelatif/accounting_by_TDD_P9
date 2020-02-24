@@ -81,16 +81,17 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
 
   @Test
   void insertEcritureComptable() {
-    //given
+    //Given
     int sizeEcritureComptables = dao.getListEcritureComptable().size();
     EcritureComptable ecritureComptable = new EcritureComptable();
     JournalComptable journal = new JournalComptable();
     ecritureComptable.setJournal(journal);
 
-    //then
+    //Then
     assertThrows(DataIntegrityViolationException.class,
         () -> dao.insertEcritureComptable(ecritureComptable));
     assertThat(dao.getListEcritureComptable().size()).isEqualTo(sizeEcritureComptables);
   }
+
 
 }
