@@ -2,12 +2,14 @@ package com.dummy.myerp.testconsumer.consumer.dao.contrat.impl.db.dao;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.db.AbstractDbConsumer;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,16 +52,35 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
 
     assertThat(getListEcritureComptables).isNotNull();
     assertThat(getListEcritureComptables).size().isGreaterThan(2);
-    System.out.println(getListEcritureComptables);
 
   }
 
-//  @Test
-//  void getEcritureComptable(Integer pId) throws NotFoundException {
-//    EcritureComptable ecritureComptable = dao.getEcritureComptable(-1);
-//    System.out.println(ecritureComptable);
-////    assertThat(ecritureComptable).isNotNull();
-//
-//  }
+  @Test
+  void getEcritureComptable() throws NotFoundException {
+    EcritureComptable ecritureComptable = dao.getEcritureComptable(-1);
+    assertThat(ecritureComptable).isNotNull();
+  }
 
+  @Test
+  void getEcritureComptable_TriggedNotFoundException() {
+    assertThrows(NotFoundException.class, () -> dao.getEcritureComptable(1));
+
+  }
+
+  @Test
+  void getEcritureComptableByRef() throws NotFoundException {
+    EcritureComptable ecritureComptable = dao.getEcritureComptableByRef("AC-2016/00001");
+    assertThat(ecritureComptable).isNotNull();
+  }
+
+  @Test
+  void getEcritureComptableByRef_TriggedNotFoundException() {
+    assertThrows(NotFoundException.class, () -> dao.getEcritureComptableByRef("AC-1016/00001"));
+  }
+
+
+  @Test
+  void insertEcritureComptable() {
+
+  }
 }
