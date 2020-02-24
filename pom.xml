@@ -416,6 +416,8 @@
           <executions>
             <execution>
               <goals>
+                <goal>report</goal>
+                <goal>report-integration</goal>
                 <goal>prepare-agent</goal>
               </goals>
             </execution>
