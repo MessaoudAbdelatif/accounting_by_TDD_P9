@@ -13,6 +13,7 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig(locations = {
@@ -78,9 +79,18 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
     assertThrows(NotFoundException.class, () -> dao.getEcritureComptableByRef("AC-1016/00001"));
   }
 
+  @Test
+  void insertEcritureComptable() {
+    //given
+    int sizeEcritureComptables = dao.getListEcritureComptable().size();
+    EcritureComptable ecritureComptable = new EcritureComptable();
+    JournalComptable journal = new JournalComptable();
+    ecritureComptable.setJournal(journal);
 
-//  @Test
-//  void insertEcritureComptable() {
-//
-//  }
+    //then
+    assertThrows(DataIntegrityViolationException.class,
+        () -> dao.insertEcritureComptable(ecritureComptable));
+    assertThat(dao.getListEcritureComptable().size()).isEqualTo(sizeEcritureComptables);
+  }
+
 }
