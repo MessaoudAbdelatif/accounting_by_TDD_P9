@@ -142,7 +142,6 @@
         <version>${project.version}</version>
       </dependency>
 
-
       <!-- ========== Libraries ========== -->
       <!-- ===== Log4j ===== -->
       <dependency>
@@ -213,6 +212,12 @@
         <version>${spring.version}</version>
         <scope>compile</scope>
       </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+        <scope>test</scope>
+      </dependency>
 
       <!-- ===== Spring JDBC/Tx ===== -->
       <!-- spring-tx : transaction, JCA, DAO -->
@@ -281,12 +286,6 @@
       </dependency>
 
       <!-- ===== Test integration Mockito===== -->
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <scope>test</scope>
-        <version>${spring.version}</version>
-      </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
@@ -416,8 +415,6 @@
           <executions>
             <execution>
               <goals>
-                <goal>report</goal>
-                <goal>report-integration</goal>
                 <goal>prepare-agent</goal>
               </goals>
             </execution>
@@ -638,6 +635,11 @@
             </reports>
           </reportSet>
         </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.5</version>
       </plugin>
 <!--      <plugin>-->
 <!--        <groupId>org.codehaus.mojo</groupId>-->

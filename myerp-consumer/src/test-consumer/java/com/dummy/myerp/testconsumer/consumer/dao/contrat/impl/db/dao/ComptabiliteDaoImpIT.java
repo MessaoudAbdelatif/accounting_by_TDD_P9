@@ -16,8 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+// Spring 5 only
 @SpringJUnitConfig(locations = {
     "classpath:com/dummy/myerp/testconsumer/consumer/bootstrapContext.xml"})
+//Spring 4
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = "classpath:com/dummy/myerp/testconsumer/consumer/bootstrapContext.xml")
 public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
 
   @Autowired
