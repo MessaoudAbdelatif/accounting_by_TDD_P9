@@ -440,7 +440,8 @@
               <format>xml</format>
             </formats>
             <check/>
-            <executions>
+          </configuration>
+          <executions>
             <execution>
               <id>cobertura-check</id>
               <phase>verify</phase>
@@ -449,8 +450,7 @@
                 <goal>cobertura-integration-test</goal>
               </goals>
             </execution>
-            </executions>
-          </configuration>
+          </executions>
         </plugin>
 
 
