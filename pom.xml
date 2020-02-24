@@ -642,6 +642,14 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>2.7</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>cobertura</report>
+              <report>cobertura-integration</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>
