@@ -79,8 +79,8 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
   }
 
 
-  @Test
-  void insertEcritureComptable() {
-
-  }
+//  @Test
+//  void insertEcritureComptable() {
+//
+//  }
 }
