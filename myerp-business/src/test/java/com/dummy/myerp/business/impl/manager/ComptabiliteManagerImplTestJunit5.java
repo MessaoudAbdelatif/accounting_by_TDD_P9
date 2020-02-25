@@ -26,16 +26,14 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("ComptabiliteManagerImpl == classUnderTest")
 @ExtendWith(MockitoExtension.class)
-public class ComptabiliteManagerImplTest_Junit5 extends AbstractBusinessManager {
+public class ComptabiliteManagerImplTestJunit5 extends AbstractBusinessManager {
 
   private EcritureComptable vEcritureComptable;
 
@@ -313,7 +311,8 @@ public class ComptabiliteManagerImplTest_Junit5 extends AbstractBusinessManager 
   }
 
   @Test
-  void checkEcritureComptable_passedAfterAddReference() throws FunctionalException, NotFoundException {
+  void checkEcritureComptable_passedAfterAddReference()
+      throws FunctionalException, NotFoundException {
     initClassUnderTestDaoMock();
 
     JournalComptable journalComptable = new JournalComptable("AC", "Dummy");
