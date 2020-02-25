@@ -402,11 +402,11 @@
               </goals>
             </execution>
           </executions>
-          <!--          <configuration>-->
-          <!--            <argLine>-->
-          <!--              &#45;&#45;illegal-access=permit-->
-          <!--            </argLine>-->
-          <!--          </configuration>-->
+                    <configuration>
+                      <argLine>
+                        --illegal-access=permit
+                      </argLine>
+                    </configuration>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
