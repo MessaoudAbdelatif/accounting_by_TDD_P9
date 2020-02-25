@@ -17,6 +17,7 @@
 
   <!-- ===== Maven ===== -->
   <artifactId>myerp-business</artifactId>
+  <packaging>jar</packaging>
 
   <!-- ===== General information ===== -->
   <name>${project.artifactId}</name>

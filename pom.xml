@@ -102,17 +102,17 @@
   <!-- =============================================================== -->
   <!-- Repositories -->
   <!-- =============================================================== -->
-  <repositories>
-    <!-- ===== Project local repository ===== -->
-    <repository>
-      <id>project.local</id>
-      <name>project.local</name>
-      <url>file://${basedir}/../src/lib/</url>
-      <releases>
-        <updatePolicy>always</updatePolicy>
-      </releases>
-    </repository>
-  </repositories>
+<!--  <repositories>-->
+<!--    &lt;!&ndash; ===== Project local repository ===== &ndash;&gt;-->
+<!--    <repository>-->
+<!--      <id>project.local</id>-->
+<!--      <name>project.local</name>-->
+<!--      <url>file://${basedir}/../src/</url>-->
+<!--      <releases>-->
+<!--        <updatePolicy>always</updatePolicy>-->
+<!--      </releases>-->
+<!--    </repository>-->
+<!--  </repositories>-->
 
 
   <!-- =============================================================== -->

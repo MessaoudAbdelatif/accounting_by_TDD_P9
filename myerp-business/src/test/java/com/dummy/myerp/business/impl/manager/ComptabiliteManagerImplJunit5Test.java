@@ -33,7 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ComptabiliteManagerImplTestJunit5 extends AbstractBusinessManager {
+public class ComptabiliteManagerImplJunit5Test extends AbstractBusinessManager {
 
   private EcritureComptable vEcritureComptable;
 

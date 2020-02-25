@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComptabiliteManagerImplTestJunit4 extends AbstractBusinessManager {
+public class ComptabiliteManagerImplJunit4Test extends AbstractBusinessManager {
 
 
   private EcritureComptable vEcritureComptable;

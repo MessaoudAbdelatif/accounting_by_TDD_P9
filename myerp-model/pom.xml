@@ -17,6 +17,7 @@
 
   <!-- ===== Maven ===== -->
   <artifactId>myerp-model</artifactId>
+  <packaging>jar</packaging>
 
   <!-- ===== General information ===== -->
   <name>${project.artifactId}</name>

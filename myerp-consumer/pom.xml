@@ -16,6 +16,7 @@
 
   <!-- ===== Maven ===== -->
   <artifactId>myerp-consumer</artifactId>
+  <packaging>jar</packaging>
 
   <!-- ===== General information ===== -->
   <name>${project.artifactId}</name>
@@ -48,6 +49,10 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>myerp-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>myerp-technical</artifactId>
     </dependency>
 
     <!-- spring-jdbc : commons-exceptions, datasource management -->
