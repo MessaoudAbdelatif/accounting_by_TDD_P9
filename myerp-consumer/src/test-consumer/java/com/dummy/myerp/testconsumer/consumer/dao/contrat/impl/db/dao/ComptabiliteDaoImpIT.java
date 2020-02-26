@@ -10,6 +10,7 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
+import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,7 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
   }
 
   @Test
-  void insertEcritureComptable() {
+  void insertEcritureComptable_triggedDataIntegrityViolationException() {
     //Given
     int sizeEcritureComptables = dao.getListEcritureComptable().size();
     EcritureComptable ecritureComptable = new EcritureComptable();
@@ -94,8 +95,37 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
     //Then
     assertThrows(DataIntegrityViolationException.class,
         () -> dao.insertEcritureComptable(ecritureComptable));
+    //my DB records doesn't increase.
     assertThat(dao.getListEcritureComptable().size()).isEqualTo(sizeEcritureComptables);
   }
 
+  @Test
+  void insertEcritureComptable_WithListLigneEcritureComptable_ProcessingInsertIntoDB() {
+    //Given
 
+    EcritureComptable dummyEcritureComptable = new EcritureComptable();
+    dummyEcritureComptable.setLibelle("Dummy");
+    dummyEcritureComptable.setDate(new Date());
+
+    JournalComptable dummeyJournal = new JournalComptable();
+    dummeyJournal.setCode("AC");
+    dummeyJournal.setLibelle("AchatTest");
+
+    dummyEcritureComptable.setJournal(dummeyJournal);
+    dummyEcritureComptable.setReference("AC-2016/00002");
+
+    int sizeEC = dao.getListEcritureComptable().size();
+
+    //When
+    dao.insertEcritureComptable(dummyEcritureComptable);
+
+    //Then
+    assertThat(dummyEcritureComptable.getId()).isNotNull();
+    assertThat(dao.getListEcritureComptable().size()).isEqualTo(sizeEC+1);
+
+    /*
+    Reset the db.
+    */
+    dao.deleteEcritureComptable(dummyEcritureComptable.getId());
+  }
 }

@@ -49,11 +49,11 @@
     <property name="SQLinsertEcritureComptable">
       <value>
         INSERT INTO myerp.ecriture_comptable (
-        id,
-        journal_code, reference, date, libelle
+          id,
+          journal_code, reference, date, libelle
         ) VALUES (
-        nextval('myerp.ecriture_comptable_id_seq'),
-        :journal_code, :reference, :date, :libelle
+          nextval('myerp.ecriture_comptable_id_seq'),
+          :journal_code, :reference, :date, :libelle
         )
       </value>
     </property>
