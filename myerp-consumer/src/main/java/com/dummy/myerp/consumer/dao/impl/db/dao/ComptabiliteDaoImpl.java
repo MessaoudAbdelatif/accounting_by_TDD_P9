@@ -338,7 +338,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(
         getDataSource(DataSourcesEnum.MYERP));
     MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-    vSqlParams.addValue("code", code);
+    vSqlParams.addValue("journal_code", code);
     vSqlParams.addValue("annee", year);
     SequanceEcritureComptableRM vRM = new SequanceEcritureComptableRM();
     SequenceEcritureComptable vBean = vJdbcTemplate
@@ -361,7 +361,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(
         getDataSource(DataSourcesEnum.MYERP));
     MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-    vSqlParams.addValue("journal_code", sequenceEcritureComptable.getJournalCode());
+    vSqlParams.addValue("journal_code", sequenceEcritureComptable.getJournalCode().getCode());
     vSqlParams.addValue("annee", sequenceEcritureComptable.getAnnee());
     vSqlParams.addValue("derniere_valeur", sequenceEcritureComptable.getDerniereValeur());
     vJdbcTemplate.update(SQLupdateSequenceEcritureComptable, vSqlParams);
@@ -382,7 +382,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(
         getDataSource(DataSourcesEnum.MYERP));
     MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-    vSqlParams.addValue("journal_code", sequenceEcritureComptable.getJournalCode());
+    vSqlParams.addValue("journal_code", sequenceEcritureComptable.getJournalCode().getCode());
     vSqlParams.addValue("annee", sequenceEcritureComptable.getAnnee());
     vSqlParams.addValue("derniere_valeur", sequenceEcritureComptable.getDerniereValeur());
     vJdbcTemplate.update(SQLinsertSequenceEcritureComptable, vSqlParams);

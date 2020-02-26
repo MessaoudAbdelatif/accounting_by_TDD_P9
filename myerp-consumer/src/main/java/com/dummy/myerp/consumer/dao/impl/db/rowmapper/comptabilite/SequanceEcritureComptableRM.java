@@ -16,7 +16,7 @@ public class SequanceEcritureComptableRM implements RowMapper<SequenceEcritureCo
     SequenceEcritureComptable vBean = new SequenceEcritureComptable();
     vBean.setJournalCode(journalComptableDaoCache.getByCode(pRs.getString("journal_code")));
     vBean.setAnnee(pRs.getInt("annee"));
-    vBean.setDerniereValeur(pRs.getInt("derniere_Valeur"));
+    vBean.setDerniereValeur(pRs.getInt("derniere_valeur"));
     return vBean;
   }
 }

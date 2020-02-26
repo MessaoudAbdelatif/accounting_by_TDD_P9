@@ -94,13 +94,14 @@
     <property name="SQLgetListSequenceEcritureComptable">
       <value>
         SELECT * FROM myerp.sequence_ecriture_comptable
-        WHERE annee = :annee
+        WHERE journal_code = :journal_code
+        AND annee= :annee
       </value>
     </property>
     <property name="SQLupdateSequenceEcritureComptable">
       <value>
         UPDATE myerp.sequence_ecriture_comptable SET derniere_valeur = :derniere_valeur
-        WHERE annee = :annee AND journal_code = :journal_code
+        WHERE journal_code = :journal_code AND annee = :annee
       </value>
     </property>
     <property name="SQLinsertSequenceEcritureComptable">

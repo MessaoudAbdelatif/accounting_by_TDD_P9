@@ -9,6 +9,7 @@ import com.dummy.myerp.consumer.db.AbstractDbConsumer;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.Date;
 import java.util.List;
@@ -127,5 +128,45 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
     Reset the db.
     */
     dao.deleteEcritureComptable(dummyEcritureComptable.getId());
+  }
+
+  @Test
+  void updateEcritureComptable_replaceLibelle() throws NotFoundException {
+    //Given
+    EcritureComptable usedEcritureComptable = dao.getEcritureComptable(-1);
+    String oldlibelle = usedEcritureComptable.getLibelle();
+    String newLibelle = oldlibelle.concat("s");
+    usedEcritureComptable.setLibelle(newLibelle);
+
+    //When
+    dao.updateEcritureComptable(usedEcritureComptable);
+
+    //Then
+    EcritureComptable updatedEcritureComptable = dao.getEcritureComptable(-1);
+    assertThat(updatedEcritureComptable.getLibelle().equals(newLibelle)).isTrue();
+    assertThat(updatedEcritureComptable.getLibelle().endsWith("s")).isTrue();
+  }
+
+  @Test
+  void getSequenceEcritureComptable() {
+    SequenceEcritureComptable sequenceEcritureComptable = dao.getSequenceEcritureComptable("AC", 2016);
+
+    assertThat(sequenceEcritureComptable).isNotNull();
+  }
+
+  @Test
+  void updateSequenceEcritureComptable() {
+    //Given
+    SequenceEcritureComptable oldSEC = dao.getSequenceEcritureComptable("AC", 2016);
+    Integer derniereValeur = oldSEC.getDerniereValeur();
+    int newDerniereValeur = derniereValeur + 1;
+    oldSEC.setDerniereValeur(newDerniereValeur);
+    //when
+    System.out.println(oldSEC);
+    dao.updateSequenceEcritureComptable(oldSEC);
+    //Then
+    SequenceEcritureComptable updateSEC = dao.getSequenceEcritureComptable("AC", 2016);
+    assertThat(updateSEC).isNotNull();
+    assertThat(updateSEC).isNotEqualTo(oldSEC);
   }
 }
