@@ -169,4 +169,19 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
     assertThat(updateSEC).isNotNull();
     assertThat(updateSEC).isNotEqualTo(oldSEC);
   }
+
+  @Test
+  void insertSequenceEcritureComptable() {
+    //Given
+    SequenceEcritureComptable sequenceEcritureComptable = dao.getSequenceEcritureComptable("AC", 2016);
+    sequenceEcritureComptable.setDerniereValeur(11);
+    sequenceEcritureComptable.setAnnee(1901);
+    //When
+    dao.insertSequenceEcritureComptable(sequenceEcritureComptable);
+    //Then
+    assertThat(dao.getSequenceEcritureComptable("AC",1901)).isNotNull();
+    //reset test-db
+    dao.deleteSequenceEcritureComptable("AC",1901);
+
+  }
 }

@@ -106,8 +106,14 @@
     </property>
     <property name="SQLinsertSequenceEcritureComptable">
       <value>
-        INSERT INTO myerp.sequence_ecriture_comptable (annee, derniere_valuer, journal_code)
+        INSERT INTO myerp.sequence_ecriture_comptable (annee, derniere_valeur, journal_code)
         VALUES (:annee, :derniere_valeur, :journal_code)
+      </value>
+    </property>
+    <property name="SQLdeleteSequenceEcritureComptable">
+      <value>
+        DELETE FROM myerp.sequence_ecriture_comptable
+        WHERE journal_code= :journal_code AND annee= :annee
       </value>
     </property>
   </bean>

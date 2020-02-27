@@ -96,4 +96,6 @@ public interface ComptabiliteDao {
   void updateSequenceEcritureComptable(SequenceEcritureComptable sequenceEcritureComptable);
 
   void insertSequenceEcritureComptable(SequenceEcritureComptable sequenceEcritureComptable);
+
+  void deleteSequenceEcritureComptable(String journalCode,Integer year);
 }
