@@ -3,7 +3,9 @@ package com.dummy.myerp.model.bean.comptabilite;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,5 +72,28 @@ public class EcritureComptableTest {
 
     assertThat(vEcriture.getTotalDebit()).as("The Sum of all debit colon !")
         .isLessThan(TROIS_CENT_UN);
+  }
+
+  @Test
+  public void toStringTest(){
+    EcritureComptable ecritureComptable = new EcritureComptable();
+    ecritureComptable.setLibelle("fakeLibelle");
+    ecritureComptable.setJournal(new JournalComptable("dummyCode", "dummyLibelle"));
+    ecritureComptable.setId(1);
+    ecritureComptable.setDate(new Date());
+    ecritureComptable.setReference("AA-0000-00000");
+    String sep = ", ";
+    String expectedString = "EcritureComptable{id="+ecritureComptable.getId()
+        +sep+"journal="+ecritureComptable.getJournal()
+        +sep+"reference='"+ecritureComptable.getReference()+"'"
+        +sep+"date="+ecritureComptable.getDate()
+        +sep+"libelle='"+ecritureComptable.getLibelle()+"'"
+        +sep+"totalDebit="+ecritureComptable.getTotalDebit().toPlainString()
+        +sep+"totalCredit="+ecritureComptable.getTotalCredit().toPlainString()
+        +sep+"listLigneEcriture=[\n"+
+        StringUtils.join(ecritureComptable.getListLigneEcriture(), "\n")+
+        "\n]}";
+    String resultString = ecritureComptable.toString();
+    Assert.assertEquals(expectedString, resultString);
   }
 }
