@@ -106,7 +106,7 @@ public class ComptabiliteManagerImplJunit5Test extends AbstractBusinessManager {
   }
 
   @Test
-  public final void addReference_callAtLeastOneTimeDAO() {
+  public final void addReference_callAtLeastOneTimeDAO() throws NotFoundException {
     initClassUnderTestDaoMock();
 
     classUnderTest.addReference(vEcritureComptable);

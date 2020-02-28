@@ -53,7 +53,7 @@ public interface ComptabiliteManager {
    *
    * @param pEcritureComptable L'écriture comptable concernée
    */
-  void addReference(EcritureComptable pEcritureComptable);
+  void addReference(EcritureComptable pEcritureComptable) throws NotFoundException;
 
   /**
    * Vérifie que l'Ecriture comptable respecte les règles de gestion.

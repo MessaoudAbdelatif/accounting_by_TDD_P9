@@ -66,7 +66,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
   }
 
   @Override
-  public synchronized void addReference(EcritureComptable pEcritureComptable) {
+  public synchronized void addReference(EcritureComptable pEcritureComptable)
+      throws NotFoundException {
 
     // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
@@ -104,7 +105,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
       latestSequenceEcritureComptableThisYear
           .setDerniereValeur(latestSequenceEcritureComptableThisYear.getDerniereValeur() + 1);
     }
-
         /*
 
                 3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
@@ -123,20 +123,24 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     reference += code.toString();
 
     pEcritureComptable.setReference(reference);
-
-    //    getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
        /*
 
       4. Enregistrer(insert / update) la valeur de la séquence en persitance
           (table sequence_ecriture_comptable)
           */
 
-    if (latestSequenceEcritureComptableThisYear.getDerniereValeur() == 1) {
-      getDaoProxy().getComptabiliteDao()
-          .insertSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
-    } else {
-      getDaoProxy().getComptabiliteDao()
-          .updateSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+    try {
+      getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
+
+      if (latestSequenceEcritureComptableThisYear.getDerniereValeur() == 1) {
+        getDaoProxy().getComptabiliteDao()
+            .insertSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+      } else {
+        getDaoProxy().getComptabiliteDao()
+            .updateSequenceEcritureComptable(latestSequenceEcritureComptableThisYear);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
   }

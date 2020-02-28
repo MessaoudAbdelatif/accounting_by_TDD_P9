@@ -1,6 +1,7 @@
 package com.dummy.myerp.testbusiness.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -52,7 +53,6 @@ public class BusinessIT extends AbstractBusinessManager {
     ecritureComptable.setLibelle("FakeEcitureComptable");
     ecritureComptable.setJournal(journalComptable);
     Date date = new Date();
-    date.setYear(116);
     ecritureComptable.setDate(date);
 
     LigneEcritureComptable firstLigne = new LigneEcritureComptable();
@@ -116,5 +116,36 @@ public class BusinessIT extends AbstractBusinessManager {
       getBusinessProxy().getComptabiliteManager().deleteEcritureComptable(ecritureComptable.getId());
     }
 
+  }*/
+ @Test
+ public void updateEcritureComptable_Test() throws FunctionalException {
+   //given
+   List<EcritureComptable> listEcriture = getBusinessProxy().getComptabiliteManager().getListEcritureComptable();
+   EcritureComptable ecriture = listEcriture.get(1);
+   ecriture.setReference("VE-2016/00002");
+   //then
+   getBusinessProxy().getComptabiliteManager().updateEcritureComptable(ecriture);
+ }
+
+  /*@Test
+  void insertEcritureComptable_Test() throws NotFoundException {
+    List<EcritureComptable> listEcriture = getBusinessProxy().getComptabiliteManager().getListEcritureComptable();
+    EcritureComptable ecritureComptable = this.getFakeEcritureComptable();
+    ecritureComptable.getListLigneEcriture().get(1).setDebit(new BigDecimal(-10));
+    ecritureComptable.getListLigneEcriture().get(1).setCredit(null);
+    System.out.println(ecritureComptable);
+    getBusinessProxy().getComptabiliteManager().addReference(ecritureComptable);
+
+    //when
+    String message = null;
+    try {
+      getBusinessProxy().getComptabiliteManager().insertEcritureComptable(ecritureComptable);
+    } catch (FunctionalException e) {
+      message = e.getMessage();
+    }finally {
+      //then
+      assertThat(getBusinessProxy().getComptabiliteManager().getListEcritureComptable().size()).isEqualTo(listEcriture.size());
+      assertThat(message).isEqualTo("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+    }
   }*/
 }
