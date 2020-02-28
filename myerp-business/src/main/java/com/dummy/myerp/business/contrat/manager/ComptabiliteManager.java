@@ -3,7 +3,9 @@ package com.dummy.myerp.business.contrat.manager;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
 import java.util.List;
 
 
@@ -59,7 +61,8 @@ public interface ComptabiliteManager {
    * @param pEcritureComptable -
    * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
    */
-  void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException;
+  void checkEcritureComptable(EcritureComptable pEcritureComptable)
+      throws FunctionalException, NotFoundException;
 
   /**
    * Insert une nouvelle écriture comptable.
@@ -67,7 +70,8 @@ public interface ComptabiliteManager {
    * @param pEcritureComptable -
    * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
    */
-  void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException;
+  void insertEcritureComptable(EcritureComptable pEcritureComptable)
+      throws FunctionalException, NotFoundException;
 
   /**
    * Met à jour l'écriture comptable.
@@ -83,4 +87,7 @@ public interface ComptabiliteManager {
    * @param pId l'id de l'écriture
    */
   void deleteEcritureComptable(Integer pId);
+
+  SequenceEcritureComptable getSequenceEcritureComptables(String code, Integer year)
+      throws NotFoundException;
 }

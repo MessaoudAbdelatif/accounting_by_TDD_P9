@@ -97,7 +97,7 @@ public class ComptabiliteManagerImplJunit5Test extends AbstractBusinessManager {
   }
 
   @Test
-  void getSequenceEcritureComptables() {
+  void getSequenceEcritureComptables() throws NotFoundException {
     initClassUnderTestDaoMock();
 
     classUnderTest.getSequenceEcritureComptables("AC", 2019);
@@ -238,7 +238,8 @@ public class ComptabiliteManagerImplJunit5Test extends AbstractBusinessManager {
   }
 
   @Test
-  void checkEcritureComputableUnit_RG5_whenReferencePartThreeIsWrong_thenTriggerFunctionalException() {
+  void checkEcritureComputableUnit_RG5_whenReferencePartThreeIsWrong_thenTriggerFunctionalException()
+      throws NotFoundException {
     initClassUnderTestDaoMock();
     vEcritureComptable.setReference("AC-2020/00003");
 

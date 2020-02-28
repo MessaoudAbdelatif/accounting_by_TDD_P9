@@ -60,7 +60,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
   /**
    * {@inheritDoc}
    */
-  public SequenceEcritureComptable getSequenceEcritureComptables(String code, Integer year) {
+  public SequenceEcritureComptable getSequenceEcritureComptables(String code, Integer year)
+      throws NotFoundException {
     return getDaoProxy().getComptabiliteDao().getSequenceEcritureComptable(code, year);
   }
 
@@ -77,9 +78,14 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
     Calendar cal = Calendar.getInstance();
     cal.setTime(pEcritureComptable.getDate());
 
-    latestSequenceEcritureComptableThisYear = getSequenceEcritureComptables(
-        pEcritureComptable.getJournal().getCode(),
-        cal.get(Calendar.YEAR));
+    try {
+      latestSequenceEcritureComptableThisYear = getSequenceEcritureComptables(
+          pEcritureComptable.getJournal().getCode(),
+          cal.get(Calendar.YEAR));
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println(e.getMessage());
+    }
 
 
       /*
@@ -140,7 +146,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
    */
   @Override
   public void checkEcritureComptable(EcritureComptable pEcritureComptable)
-      throws FunctionalException {
+      throws FunctionalException, NotFoundException {
     this.checkEcritureComptableUnit(pEcritureComptable);
     this.checkEcritureComptableContext(pEcritureComptable);
   }
@@ -153,7 +159,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
    * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
    */
   protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable)
-      throws FunctionalException {
+      throws FunctionalException, NotFoundException {
     // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
     Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator()
         .validate(pEcritureComptable);
@@ -290,7 +296,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements
    */
   @Override
   public void insertEcritureComptable(EcritureComptable pEcritureComptable)
-      throws FunctionalException {
+      throws FunctionalException, NotFoundException {
     this.checkEcritureComptable(pEcritureComptable);
     TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
     try {

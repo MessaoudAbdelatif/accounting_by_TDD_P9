@@ -148,14 +148,14 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
   }
 
   @Test
-  void getSequenceEcritureComptable() {
+  void getSequenceEcritureComptable() throws NotFoundException {
     SequenceEcritureComptable sequenceEcritureComptable = dao.getSequenceEcritureComptable("AC", 2016);
 
     assertThat(sequenceEcritureComptable).isNotNull();
   }
 
   @Test
-  void updateSequenceEcritureComptable() {
+  void updateSequenceEcritureComptable() throws NotFoundException {
     //Given
     SequenceEcritureComptable oldSEC = dao.getSequenceEcritureComptable("AC", 2016);
     Integer derniereValeur = oldSEC.getDerniereValeur();
@@ -171,7 +171,7 @@ public class ComptabiliteDaoImpIT extends AbstractDbConsumer {
   }
 
   @Test
-  void insertSequenceEcritureComptable() {
+  void insertSequenceEcritureComptable() throws NotFoundException {
     //Given
     SequenceEcritureComptable sequenceEcritureComptable = dao.getSequenceEcritureComptable("AC", 2016);
     sequenceEcritureComptable.setDerniereValeur(11);

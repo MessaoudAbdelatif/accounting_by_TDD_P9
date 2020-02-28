@@ -35,7 +35,8 @@ public interface ComptabiliteDao {
    * @param year: l'année de la persistance de la séquence d'écriture comptable.
    * @return {@link SequenceEcritureComptable}
    **/
-  SequenceEcritureComptable getSequenceEcritureComptable(String code, Integer year);
+  SequenceEcritureComptable getSequenceEcritureComptable(String code, Integer year)
+      throws NotFoundException;
 
   // ==================== EcritureComptable ====================
 
