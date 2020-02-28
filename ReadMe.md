@@ -13,7 +13,7 @@ Migration from Junit4 to Junit5
 
 Intergration testing using Mockito
 
-CI/CD : using Travis Ci , Circle Ci, CodeCov, Jacoco.
+CI/CD : using Travis Ci , Circle Ci, SonarCloud, CodeCov, Jacoco.
 
 BDD : given, when, then.
       AssertJ
